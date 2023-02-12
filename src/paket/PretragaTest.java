@@ -3,7 +3,6 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.Assert;
-
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNot.not;
@@ -22,25 +21,36 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import java.util.*;
+import java.util.logging.Logger;
+import java.io.FileWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class PretragaTest {
+
+public class PretragaTest 
+{
   private WebDriver driver;
+  private Logger l = Logger.getLogger(PretragaTest.class.getName());
   private Map<String, Object> vars;
   JavascriptExecutor js;
   String searchWord = "bending bars";
+  
   @Before
-  public void setUp() {
+  public void setUp() 
+  {
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
+  
   @After
-  public void tearDown() {
+  public void tearDown() 
+  {
     driver.quit();
   }
+  
   @Test
-  public void pretraga() {
+  public void pretraga() 
+  {
     driver.get("https://realno.rs/");
     driver.manage().window().setSize(new Dimension(1382, 754));
     driver.findElement(By.name("search")).click();
@@ -74,5 +84,21 @@ public class PretragaTest {
     boolean isContained = result.contains(searchWord) ? true : false;
     
     Assert.assertTrue(isContained);
+    
+    String izvestaj ="\nIme testa : Pretraga proizvoda \n"+
+     	   "Opis testa : Provera funkcije pretrage proizvoda \n"+
+            "Test je uspesno izvrsen! \n\n";
+    l.info(izvestaj.toString());
+    try 
+    {
+    	FileWriter fw = new FileWriter("C:\\Users\\dilpd\\Desktop\\test-report.txt", true);
+    	fw.write(izvestaj.toString());
+    	fw.flush();
+    	fw.close();
+    }
+    catch (Exception e) 
+    {
+    	System.out.println(e.getMessage());
+    }
   }
 }

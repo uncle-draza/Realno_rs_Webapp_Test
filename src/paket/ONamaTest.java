@@ -20,25 +20,36 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import java.util.*;
+import java.util.logging.Logger;
+import java.io.FileWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class ONamaTest {
+
+public class ONamaTest 
+{
   private WebDriver driver;
+  private Logger l = Logger.getLogger(ONamaTest.class.getName());
   private Map<String, Object> vars;
   JavascriptExecutor js;
   String onama;
+  
   @Before
-  public void setUp() {
+  public void setUp() 
+  {
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
+  
   @After
-  public void tearDown() {
+  public void tearDown() 
+  {
     driver.quit();
   }
+  
   @Test
-  public void oNama() {
+  public void oNama() 
+  {
     driver.get("https://realno.rs/");
     driver.manage().window().setSize(new Dimension(1366, 738));
     driver.findElement(By.cssSelector(".links-menu-item-9 .links-text")).click();
@@ -53,5 +64,21 @@ public class ONamaTest {
     onama += driver.findElement(By.cssSelector(".nitro-offscreen:nth-child(16)")).getText();
     
     System.out.println(onama);
+    String izvestaj ="\nIme testa : O nama \n"+
+      	   "Opis testa : Prikupljanje podataka o sajtu \n"+
+    	   onama + "\n" +
+           "Test je uspesno izvrsen! \n\n";
+    l.info(izvestaj.toString());
+    try 
+    {
+    	FileWriter fw = new FileWriter("C:\\Users\\dilpd\\Desktop\\test-report.txt", true);
+     	fw.write(izvestaj.toString());
+     	fw.flush();
+     	fw.close();
+    }
+    catch (Exception e) 
+    {
+     	System.out.println(e.getMessage());
+    }
   }
 }

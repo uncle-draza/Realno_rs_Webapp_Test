@@ -20,24 +20,35 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import java.util.*;
+import java.util.logging.Logger;
+import java.io.FileWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class DodavanjeUKorpuTest {
+
+public class DodavanjeUKorpuTest 
+{
   private WebDriver driver;
+  private Logger l = Logger.getLogger(DodavanjeUKorpuTest.class.getName());
   private Map<String, Object> vars;
   JavascriptExecutor js;
+  
   @Before
-  public void setUp() {
+  public void setUp() 
+  {
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
+  
   @After
-  public void tearDown() {
+  public void tearDown() 
+  {
     driver.quit();
   }
+  
   @Test
-  public void dodavanjeUKorpu1() throws InterruptedException {
+  public void dodavanjeUKorpu1() throws InterruptedException 
+  {
     driver.get("https://realno.rs/");
     driver.manage().window().setSize(new Dimension(1382, 754));
     driver.findElement(By.cssSelector(".accordion-menu-item-2 > a > .links-text")).click();
@@ -56,9 +67,9 @@ public class DodavanjeUKorpuTest {
       builder.moveToElement(element, 0, 0).perform();
     }
     driver.findElement(By.linkText("Black - Alien - Poster sa nosačem")).click();
-    Thread.sleep(3000);
+    Thread.sleep(4000);
     driver.findElement(By.cssSelector("#button-cart > .btn-text")).click();
-    Thread.sleep(3000);
+    Thread.sleep(4000);
     driver.findElement(By.cssSelector(".accordion-menu-item-1 > a > .links-text")).click();
     driver.findElement(By.id("MzQ0NDozODY=-1")).click();
     driver.findElement(By.id("btn-grid-view")).click();
@@ -75,7 +86,7 @@ public class DodavanjeUKorpuTest {
     }
     driver.findElement(By.linkText("All Green - Breaking Bad - Ceger")).click();
     driver.findElement(By.cssSelector("#button-cart > .btn-text")).click();
-    Thread.sleep(3000);
+    Thread.sleep(4000);
     driver.findElement(By.cssSelector(".accordion-menu-item-4 > a > .links-text")).click();
     driver.findElement(By.cssSelector(".refine-item:nth-child(2) img")).click();
     driver.findElement(By.id("btn-grid-view")).click();
@@ -90,9 +101,10 @@ public class DodavanjeUKorpuTest {
       Actions builder = new Actions(driver);
       builder.moveToElement(element, 0, 0).perform();
     }
+    
     driver.findElement(By.linkText("Call Of Duty - Black Ops 4 - Šolja")).click();
     driver.findElement(By.cssSelector("#button-cart > .btn-text")).click();
-    Thread.sleep(3000);
+    Thread.sleep(4000);
     driver.findElement(By.cssSelector(".fa-shopping-cart")).click();
     driver.findElement(By.linkText("Call Of Duty - Black Ops 4 - Šolja")).click();
     assertThat(driver.findElement(By.cssSelector("#product > .title")).getText(), is("CALL OF DUTY - BLACK OPS 4 - ŠOLJA"));
@@ -102,5 +114,21 @@ public class DodavanjeUKorpuTest {
     driver.findElement(By.cssSelector(".fa-shopping-cart")).click();
     driver.findElement(By.linkText("Black - Alien - Poster sa nosačem")).click();
     assertThat(driver.findElement(By.cssSelector("#product > .title")).getText(), is("BLACK - ALIEN - POSTER SA NOSAČEM"));
+    
+    String izvestaj ="\nIme testa : Dodavanje proizvoda u korpu \n"+
+            	   "Opis testa : Dodavanje tri proizvoda iz razlicitih kategorija u korpu \n"+
+                   "Test je uspesno izvrsen! \n\n";
+    l.info(izvestaj.toString());
+    try 
+    {
+    	FileWriter fw = new FileWriter("C:\\Users\\dilpd\\Desktop\\test-report.txt", true);
+    	fw.write(izvestaj.toString());
+    	fw.flush();
+    	fw.close();
+    }
+    catch (Exception e) 
+    {
+    	System.out.println(e.getMessage());
+  	}
   }
 }

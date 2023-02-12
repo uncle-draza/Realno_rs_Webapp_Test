@@ -20,24 +20,35 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import java.util.*;
+import java.util.logging.Logger;
+import java.io.FileWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class FacebookTest {
+
+public class FacebookTest 
+{
   private WebDriver driver;
+  private Logger l = Logger.getLogger(FacebookTest.class.getName());
   private Map<String, Object> vars;
   JavascriptExecutor js;
+  
   @Before
-  public void setUp() {
+  public void setUp() 
+  {
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
+  
   @After
-  public void tearDown() {
+  public void tearDown() 
+  {
     driver.quit();
   }
+  
   @Test
-  public void facebook() throws InterruptedException {
+  public void facebook() throws InterruptedException 
+  {
     driver.get("https://realno.rs/");
     driver.manage().window().setSize(new Dimension(1382, 754));
     {
@@ -48,5 +59,21 @@ public class FacebookTest {
     driver.findElement(By.cssSelector(".top-menu-14 .top-menu-item-1 > a")).click();
     Thread.sleep(5000);
     assertEquals(driver.getCurrentUrl(),"https://www.facebook.com/Realno.rs");
+    
+    String izvestaj ="\nIme testa : Facebook test \n"+
+     	   "Opis testa : Otvaranje Facebook stranice sajta. \n"+
+           "Test je uspesno izvrsen! \n\n";
+    l.info(izvestaj.toString());
+    try 
+    {
+    	FileWriter fw = new FileWriter("C:\\Users\\dilpd\\Desktop\\test-report.txt", true);
+    	fw.write(izvestaj.toString());
+    	fw.flush();
+    	fw.close();
+    }
+    catch (Exception e) 
+    {
+    	System.out.println(e.getMessage());
+    }
   }
 }

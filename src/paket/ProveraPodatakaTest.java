@@ -20,24 +20,40 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import java.util.*;
+import java.util.logging.Logger;
+import java.io.FileWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class ProveraPodatakaTest {
+
+public class ProveraPodatakaTest 
+{
   private WebDriver driver;
+  private Logger l = Logger.getLogger(ProveraPodatakaTest.class.getName());
   private Map<String, Object> vars;
   JavascriptExecutor js;
+  
+  String ime;
+  String prezime;
+  String email;
+  String telefon;
+  
   @Before
-  public void setUp() {
+  public void setUp() 
+  {
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
+  
   @After
-  public void tearDown() {
+  public void tearDown() 
+  {
     driver.quit();
   }
+  
   @Test
-  public void proveraPodataka() {
+  public void proveraPodataka() 
+  {
     driver.get("https://realno.rs/");
     driver.manage().window().setSize(new Dimension(1382, 754));
     driver.findElement(By.cssSelector(".links-menu-76 .links-menu-item-3 .links-text")).click();
@@ -51,22 +67,44 @@ public class ProveraPodatakaTest {
     driver.findElement(By.id("input-firstname")).click();
     {
       String value = driver.findElement(By.id("input-firstname")).getAttribute("value");
+      ime = value;
       assertThat(value, is("Dragoljub"));
     }
     driver.findElement(By.id("input-lastname")).click();
     {
       String value = driver.findElement(By.id("input-lastname")).getAttribute("value");
+      prezime = value;
       assertThat(value, is("Drazovic"));
     }
     driver.findElement(By.id("input-email")).click();
     {
       String value = driver.findElement(By.id("input-email")).getAttribute("value");
+      email = value;
       assertThat(value, is("dilpdrazovic@gmail.com"));
     }
     driver.findElement(By.id("input-telephone")).click();
     {
       String value = driver.findElement(By.id("input-telephone")).getAttribute("value");
+      telefon = value;
       assertThat(value, is("+381613213743"));
     }
+    
+    String izvestaj ="\nIme testa : Provera podataka\n"+
+       	   "Opis testa : Provera podataka unetih prilikom kreiranja naloga \n"+
+    	   "Podaci:\n" + "Ime: " + ime + "\nPrezime: " + prezime + "\nEmail adresa: " + email + "\nBroj telefona: " + telefon +
+           "\nTest je uspesno izvrsen! \n\n";
+      l.info(izvestaj.toString());
+      try 
+      {
+      	FileWriter fw = new FileWriter("C:\\Users\\dilpd\\Desktop\\test-report.txt", true);
+      	fw.write(izvestaj.toString());
+      	fw.flush();
+      	fw.close();
+      }
+      catch (Exception e) 
+      {
+      	System.out.println(e.getMessage());
+      }
+    
   }
 }

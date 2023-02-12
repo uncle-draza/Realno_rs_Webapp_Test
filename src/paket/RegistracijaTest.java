@@ -20,24 +20,34 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import java.util.*;
+import java.util.logging.Logger;
+import java.io.FileWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class RegistracijaTest {
+
+public class RegistracijaTest 
+{
   private WebDriver driver;
+  private Logger l = Logger.getLogger(RegistracijaTest.class.getName());
   private Map<String, Object> vars;
   JavascriptExecutor js;
+  
   @Before
   public void setUp() {
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
+  
   @After
-  public void tearDown() {
+  public void tearDown() 
+  {
     driver.quit();
   }
+  
   @Test
-  public void registracija() {
+  public void registracija() 
+  {
     driver.get("https://realno.rs/");
     driver.manage().window().setSize(new Dimension(1382, 754));
     js.executeScript("window.scrollTo(0,545)");
@@ -57,5 +67,21 @@ public class RegistracijaTest {
     driver.findElement(By.id("input-confirm")).sendKeys("Realnolozinka123!");
     driver.findElement(By.name("agree")).click();
     driver.findElement(By.cssSelector(".btn > span")).click();
+    
+    String izvestaj ="\nIme testa : Registracija korisnika \n"+
+     	   "Opis testa : Provera funkcije registrvanja korisnickog naloga na sajtu \n"+
+           "Test je uspesno izvrsen! \n\n";
+    l.info(izvestaj.toString());
+    try 
+    {
+    	FileWriter fw = new FileWriter("C:\\Users\\dilpd\\Desktop\\test-report.txt", true);
+    	fw.write(izvestaj.toString());
+    	fw.flush();
+    	fw.close();
+    }
+    catch (Exception e) 
+    {
+    	System.out.println(e.getMessage());
+    }
   }
 }

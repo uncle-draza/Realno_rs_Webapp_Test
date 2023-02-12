@@ -23,24 +23,35 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import java.util.*;
+import java.util.logging.Logger;
+import java.io.FileWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class UkupnaCenaTest {
+
+public class UkupnaCenaTest 
+{
   private WebDriver driver;
+  private Logger l = Logger.getLogger(UkupnaCenaTest.class.getName());
   private Map<String, Object> vars;
   JavascriptExecutor js;
+  
   @Before
-  public void setUp() {
+  public void setUp() 
+  {
     driver = new ChromeDriver();
     js = (JavascriptExecutor) driver;
     vars = new HashMap<String, Object>();
   }
+  
   @After
-  public void tearDown() {
+  public void tearDown()
+  {
     driver.quit();
   }
+  
   @Test
-  public void ukupnaCena() throws InterruptedException {
+  public void ukupnaCena() throws InterruptedException 
+  {
     driver.get("https://realno.rs/");
     driver.manage().window().setSize(new Dimension(1382, 754));
     driver.findElement(By.cssSelector(".accordion-menu-item-2 > a > .links-text")).click();
@@ -102,7 +113,7 @@ public class UkupnaCenaTest {
     String cena3String = driver.findElement(By.cssSelector("tr:nth-child(3) > .text-center:nth-child(6)")).getText();
     String ukupnaCenaString = driver.findElement(By.cssSelector(".cart-total tr:nth-child(2) > .text-right:nth-child(2)")).getText();
     
-    cena1String = cena1String.substring(0, cena1String.length()-3);
+    cena1String = cena1String.substring(0, cena1String.length()-3); //skidanje "Din" sa kraja stringa cene
     cena2String = cena2String.substring(0, cena2String.length()-3);
     cena3String = cena3String.substring(0, cena3String.length()-3);
     ukupnaCenaString = ukupnaCenaString.substring(0,ukupnaCenaString.length()-3);
@@ -114,5 +125,21 @@ public class UkupnaCenaTest {
     float ukupnaCena = Float.parseFloat(ukupnaCenaString);
     
     Assert.assertEquals(ukupnaCena, cena1+cena2+cena3);
+    
+    String izvestaj ="\nIme testa : Ukupna cena proizvoda u korpi \n"+
+      	   "Opis testa : Provera ukupne cene proizvoda dodatih u korpu. \n"+
+           "Test je uspesno izvrsen! \n\n";
+     l.info(izvestaj.toString());
+     try 
+     {
+     	FileWriter fw = new FileWriter("C:\\Users\\dilpd\\Desktop\\test-report.txt", true);
+     	fw.write(izvestaj.toString());
+     	fw.flush();
+     	fw.close();
+     }
+     catch (Exception e) 
+     {
+     	System.out.println(e.getMessage());
+     }
   }
 }
